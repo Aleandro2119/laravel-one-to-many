@@ -9,14 +9,47 @@
             <div class="form-group">
                 <label for="title">Titolo</label>
                 <input type="text" class="form-control" id="title" name="title"
-                    value="{{ old('title', $post->title) }}">
+                @error('title') is-valid @enderror value="{{ old('title', $post->title) }}">
+            </div>
+
+            @error('title')
+             <div class="invalid-feedback">
+                {{ $message }}
+             </div>
+            @enderror
+
+            <div class="form-group">
+                <label for="description">Categoria</label>
+                <textarea id="category" rows="6" class="form-control" name="category_id"
+                @error('category_id') is-valid @enderror>
+                <option value=""> Nessuna categoria</option>
+                @foreach ($categories as $category)
+                    <option
+                        @if (old('category_id', $post->category_id) == $category->id) selected @endif
+                        value="{{ $category->id }}">
+                        {{ $category->label }}</option>
+                @endforeach
+            </textarea>
+
+            @error('category_id')
+             <div class="invalid-feedback">
+                {{ $message }}
+             </div>
+            @enderror
             </div>
 
             <div class="form-group">
                 <label for="description">Contenuto</label>
                 <textarea id="description" rows="6" class="form-control" name="content"
-                    placeholder="Contenuto del post..">{{ old('content', $post->content) }}</textarea>
+                @error('content') is-valid @enderror
+                 placeholder="Contenuto del post..">{{ old('content', $post->content) }}</textarea>
             </div>
+
+            @error('content')
+             <div class="invalid-feedback">
+                {{ $message }}
+             </div>
+            @enderror
 
             <div class="form-group">
                 <label for="image">Immagine</label>

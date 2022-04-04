@@ -23,9 +23,12 @@
                         <a href="{{ route('admin.posts.show', $post) }}">{{ $post->title }}</a>
                     </td>
                     <td>
-                    <span
-                                class="badge badge-pill badge-{{ $post->category->color ?? 'red' }}">{{ $post->category->label}}
-                  </span>
+                        @if ($post->category)
+                        <span
+                            class="badge badge-{{ $post->category->color }}">{{ $post->category->label }}</span>
+                    @else
+                        -
+                    @endif
                     </td> 
                     <td>{{ $post->slug }}</td>
                     <td>

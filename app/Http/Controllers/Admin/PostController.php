@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
+
 
 class PostController extends Controller
 {
@@ -19,8 +19,9 @@ class PostController extends Controller
     public function index()
     {
         //
-        $posts = Post::all();
-        return view('admin.posts.index', compact('posts'));
+        $categories = Category::all();
+        $posts = Post::orderBy('updated_at', 'DESC')->paginate(10);
+        return view('admin.posts.index', compact('posts', 'categories'));
     }
 
     /**
@@ -104,7 +105,25 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         //
+
+        $request->validate(
+            [
+                'title' => 'required|string|unique:posts|min:5|max:255',
+                'image' => 'required|string|unique:posts',
+                'description' => 'required|string',
+                'category_id' => 'nullable|exists:categories,id'
+            ],
+            [
+                'required' => 'Il campo :attribute è obbligatorio!',
+                'title.unique' => "Il Post $request->title è già esistente!",
+                'image.unique' => "Questa immagine è già stata inserita!",
+                'title.min' => "$request->title è lungo meno di 5 caratteri!"
+            ]
+        );
+
         $data = $request->all();
+
+        $data['slug'] = Str::slug($request->title, '-');
         $post->update();
 
         return redirect()->route('admin.posts.show', compact('post'));
