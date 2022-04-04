@@ -23,6 +23,15 @@
                 <div class="col-12 my-5">
                     <textarea class="form-control" name="description" id="description" rows="5" placeholder="Inserisci testo.."></textarea>
                 </div>
+                <div class="col-12 mb-4">
+                <select class="custom-select" name="category_id">
+                    <option value="">Nessuna Categoria</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @if (old('category_id', $post->category_id) == $category->id) selected @endif>
+                            {{ $category->label }}</option>
+                    @endforeach
+                </select>
+                </div>
                 <div class="col-12">
                     <input type="text" class="form-control" placeholder="Url Immagine" name="image" id="image">
                 </div>
